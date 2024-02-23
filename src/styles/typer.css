@@ -13,11 +13,19 @@
   --text: 54, 62, 73;
 }
 
+.pink {
+  --primary: 240, 140, 183;
+  --text: 255, 199, 217;
+}
+
+html.pink body {
+  background-color: rgb(255, 173, 204);
+}
+
 .typer-root {
   display: flex;
   justify-content: center;
   align-items: center;
-  border-right-width: 1px;
   min-height: 100dvh;
 }
 
@@ -52,6 +60,7 @@
 @media (min-width: 480px) {
   .typer-root {
     min-width: 70%;
+    border-right-width: 1px;
   }
 
   .layout {

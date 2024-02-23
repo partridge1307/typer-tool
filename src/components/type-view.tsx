@@ -5,10 +5,18 @@ import { register, unregister } from "@tauri-apps/api/globalShortcut";
 
 interface ITypeView {
   data: TypeData[];
+  current: number;
+  onCurrentChange: (current: number) => void;
+  saveProgress: () => void;
 }
 
-const TypeView: FC<ITypeView> = ({ data }) => {
-  const [current, setCurrent] = useState(0);
+const TypeView: FC<ITypeView> = ({
+  data,
+  current,
+  onCurrentChange,
+  saveProgress,
+}) => {
+  const [currentAutoSaveState, setAutoSaveState] = useState(5);
 
   const scroll_to_paragraph = useCallback((index: number) => {
     const next_paragraph = document.querySelector(`[paragraph="${index}"]`);
@@ -26,14 +34,33 @@ const TypeView: FC<ITypeView> = ({ data }) => {
 
     navigator.clipboard.writeText(data[index].content);
     scroll_to_paragraph(index);
-    setCurrent(index);
-  }, [current, data, scroll_to_paragraph]);
+
+    if (currentAutoSaveState <= 0) {
+      saveProgress();
+      setAutoSaveState(5);
+    } else {
+      setAutoSaveState((prevState) => --prevState);
+    }
+
+    onCurrentChange(index);
+  }, [
+    current,
+    currentAutoSaveState,
+    data,
+    onCurrentChange,
+    saveProgress,
+    scroll_to_paragraph,
+  ]);
 
   useEffect(() => {
-    register("CommandOrControl+P", jump_to_paragraph);
+    scroll_to_paragraph(current);
+  }, [current, scroll_to_paragraph]);
+
+  useEffect(() => {
+    register("Tab", jump_to_paragraph);
 
     return () => {
-      unregister("CommandOrControl+P");
+      unregister("Tab");
     };
   }, [jump_to_paragraph]);
 
@@ -67,7 +94,7 @@ const TypeView: FC<ITypeView> = ({ data }) => {
               onClick={() => {
                 navigator.clipboard.writeText(data[index].content);
                 scroll_to_paragraph(index);
-                setCurrent(index);
+                onCurrentChange(index);
               }}
             >
               <td className="px-1.5 border-r-1 align-top">
