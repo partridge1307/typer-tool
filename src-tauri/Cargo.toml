@@ -1,0 +1,37 @@
+[package]
+name = "app"
+version = "0.1.0"
+description = "Tool type written in Rust. Aim for best performance"
+authors = ["partridge"]
+license = "MIT"
+repository = ""
+default-run = "app"
+edition = "2021"
+rust-version = "1.76"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[build-dependencies]
+tauri-build = { version = "1.5.1", features = [] }
+
+[dependencies]
+docx-rs = { version = "0.4.8", default-features = false }
+tauri-plugin-store = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "v1" }
+# Tauri dependencies
+serde_json = "1.0"
+serde = { version = "1.0", features = ["derive"] }
+tauri = { version = "1.6.0", features = [
+    "window-set-always-on-top",
+    "dialog-open",
+    "dialog-ask",
+    "global-shortcut-all",
+    "fs-read-dir",
+    "clipboard-all",
+    "fs-read-file",
+] }
+
+[features]
+# this feature is used for production builds or when `devPath` points to the filesystem and the built-in dev server is disabled.
+# If you use cargo directly instead of tauri's cli you can use this feature flag to switch between tauri's `dev` and `build` modes.
+# DO NOT REMOVE!!
+custom-protocol = ["tauri/custom-protocol"]
