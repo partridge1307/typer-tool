@@ -28,7 +28,7 @@ const TypeView: FC<ITypeView> = ({
     });
   }, []);
 
-  const jump_to_paragraph = useCallback(() => {
+  const jump_to_paragraph = useCallback(async () => {
     const index = current + 1;
     if (index >= data.length) return;
 

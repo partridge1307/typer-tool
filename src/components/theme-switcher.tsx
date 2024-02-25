@@ -1,7 +1,7 @@
 import { useTheme } from "next-themes";
 
 export function ThemeSwitcher() {
-  const { themes, setTheme } = useTheme();
+  const { setTheme } = useTheme();
 
   return (
     <div className="flex flex-wrap gap-2">
